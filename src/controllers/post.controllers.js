@@ -21,6 +21,12 @@ const getOne = catchError(async (req, res) => {
 
 const remove = catchError(async (req, res) => {
     const { id } = req.params;
+    const userId = req.user.id
+
+    const post = await Post.findByPk(id)
+    if(post.userId === userId){
+        return res.sendStatus(401)
+    }
     const result = await Post.destroy({ where: { id } });
     if (!result) return res.sendStatus(404);
     return res.sendStatus(204);
@@ -28,7 +34,15 @@ const remove = catchError(async (req, res) => {
 
 const update = catchError(async (req, res) => {
     const { id } = req.params;
+    const userId = req.user.id
+
+    const post = await Post.findByPk(id)
+    if(post.userId === userId){
+        return res.sendStatus(401)
+    }
+
     delete req.body.userId
+
     const result = await Post.update(
         req.body,
         { where: { id }, returning: true }

@@ -14,9 +14,8 @@ routerUser.route('/login')
 routerUser.route('/me')
     .get(verifyJwt, getMe)
 
-
 routerUser.route('/:id/post')
-    .post(setPosts)
+    .post(verifyJwt,setPosts)
 
 routerUser.route('/:id')
     .get(verifyJwt, getOne)
